@@ -6,5 +6,9 @@
   "repository": "https://github.com/MullinsLab/angular-sortable-fields",
   "author": "Thomas Sibley <trsibley@uw.edu>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {},
+  "peerDependencies": {
+    "angular": "^1.4.3"
+  }
 }
