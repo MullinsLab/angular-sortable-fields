@@ -1,0 +1,28 @@
+/* Example styling for sortable fields.  Assumes Bootstrap 3 is in use. */
+
+[sortable] [sortable-field] {
+  cursor: pointer;
+  color: rgb(51, 122, 183);
+}
+
+[sortable] [sortable-field].sorted::before {
+  /* Styling to match .glphyicon */
+  position: relative;
+  top: 1px;
+  display: block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+[sortable] [sortable-field].sorted.ascending::before {
+  /* .glyphicon-sort-by-alphabet */
+  content: "\e151";
+}
+
+[sortable] [sortable-field].sorted.descending::before {
+  /* .glyphicon-sort-by-alphabet-alt */
+  content: "\e152";
+}
