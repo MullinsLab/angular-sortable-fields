@@ -1,11 +1,15 @@
 # Sortable fields
 
-This is a generic AngularJS component for maintaining the sort state of a set
-of sortable fields.  Table rows being sortable by their column headers is a
-typical example.
+This is a generic [AngularJS][] component for maintaining the sort state of a
+set of sortable fields.  A typical use case is making table rows sortable by
+their column headers, but the component is not limited to that particular
+usage.
 
-It was originally written for our TCozy application and then minimally
+It was originally written for our [TCozy][] application and then minimally
 extracted to be reused in other projects of ours.
+
+[AngularJS]: https://angularjs.org
+[TCozy]: https://mullinslab.microbiol.washington.edu/tcozy/
 
 
 ## Usage
@@ -13,7 +17,7 @@ extracted to be reused in other projects of ours.
 The primary directive is the attribute `sortable`, which instantiates a
 SortableController on the element and publishes the controller into the
 surrounding scope as `sortable`.  Initial sort state is taken from the
-element's `sort-state` attribute and bound to the controller's `state`
+element’s `sort-state` attribute and bound to the controller’s `state`
 property.  The state is an object containing at least two properties: `field`
 and `order` (see example below).
 
@@ -25,13 +29,13 @@ parent sortable controller using its `toggleSort()` method.  The first click on
 a sortable field uses ascending sort order by default, but you may change this
 by adding the `descending-first` attribute.
 
-For convenient integration with [Angular's orderBy filter][], the sortable
+For convenient integration with [Angular’s orderBy filter][], the sortable
 controller exposes an `orderBy` property which is an array suitable for
 providing as the first argument to the orderBy filter (see example below).
 When using this `orderBy` property, nulls and empty strings in the current sort
 field are always forced to the end.
 
-[Angular's orderBy filter]: https://docs.angularjs.org/api/ng/filter/orderBy
+[Angular’s orderBy filter]: https://docs.angularjs.org/api/ng/filter/orderBy
 
 
 ## Example
@@ -62,10 +66,10 @@ A small example of markup using this component is below:
 
 ## Styling
 
-This component doesn't provide any default styling for your sortable fields, so
-you will almost certainly want to add some yourself.  If you're using
+This component doesn’t provide any default styling for your sortable fields, so
+you will almost certainly want to add some yourself.  If you’re using
 [Bootstrap 3][], you may want to look at the simple example styles provided by
 the file [`sortable-fields-bootstrap.css`][].
 
 [Bootstrap 3]: https://getbootstrap.com/docs/3.3/
-[`sortable-fields-bootstrap.css`]: blob/master/sortable-fields-bootstrap.css
+[`sortable-fields-bootstrap.css`]: sortable-fields-bootstrap.css
