@@ -71,7 +71,7 @@
   sortableController.$inject = ['$scope', '$parse', '$log'];
 
   function sortableController($scope, $parse, $log) {
-    this.fields = [];
+    this.fields = new Map();
 
     // Watch sort state and update as necessary
     $scope.$watch(
@@ -122,30 +122,32 @@
 
     // Register sort field
     this.register = function(element, field, descendingFirst) {
-      this.fields.push({ element, field });
+      this.fields.set(field, { element, field, descendingFirst });
 
       // Clicking toggles the sort
       element.addEventListener("click", () => {
         $scope.$apply(() => {
-          this.toggleSort(field, descendingFirst);
+          this.toggleSort(field);
         });
       }, false);
 
       // Initialize display state
-      this.updateField(...this.fields.slice(-1));
+      this.updateField( this.fields.get(field) );
     };
 
     // Toggle sort field
-    this.toggleSort = function(field, descendingFirst) {
+    this.toggleSort = function(name) {
+      let field = this.fields.get(name);
+
       switch (this.state.order + this.state.field) {
-        case "-" + field:
+        case "-" + field.field:
           this.state.order = "+";
           break;
-        case "+" + field:
+        case "+" + field.field:
           this.state.order = "-";
           break;
         default:
-          this.state = { field: field, order: descendingFirst ? "-" : "+" };
+          this.state = { field: field.field, order: field.descendingFirst ? "-" : "+" };
           break;
       };
     };
