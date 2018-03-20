@@ -73,13 +73,26 @@
   function sortableController($scope, $parse, $log) {
     this.fields = [];
 
-    // Watch sort state and update orderBy property and sort state display classes.
+    // Watch sort state and update as necessary
     $scope.$watch(
       () => this.state,
-      () => {
-        var getFieldValue = $parse(this.state.field);
+      () => { this.update() },
+      true
+    );
 
-        this.orderBy = [
+    this.$onInit = function() {
+      this.update();
+    };
+
+    // Update orderBy property and sort field display classes.
+    this.update = function() {
+      function orderBy(state) {
+        if (!state)
+          return [];
+
+        let getFieldValue = $parse(state.field);
+
+        return [
           // Always sort null, empty, and NaN values to the end.  This could be
           // made optional or configurable in the future.
           (item) => {
@@ -88,19 +101,24 @@
           },
 
           // Primary user-toggleable sort column
-          this.state.order + this.state.field
+          state.order + state.field
         ];
+      }
 
-        // Add/remove classes based on the current sort state
-        this.fields.forEach(field => {
-          let sortedField = this.state && this.state.field === field.field;
-          field.element.classList.toggle("sorted",     sortedField);
-          field.element.classList.toggle("ascending",  sortedField && this.state.order === "+");
-          field.element.classList.toggle("descending", sortedField && this.state.order === "-");
-        });
-      },
-      true
-    );
+      // Build orderBy
+      this.orderBy = orderBy(this.state);
+
+      // Sync display state of every field
+      this.fields.forEach(field => { this.updateField(field) });
+    };
+
+    // Add/remove classes based on the current sort state
+    this.updateField = function(field) {
+      let sortedField = this.state && this.state.field === field.field;
+      field.element.classList.toggle("sorted",     sortedField);
+      field.element.classList.toggle("ascending",  sortedField && this.state.order === "+");
+      field.element.classList.toggle("descending", sortedField && this.state.order === "-");
+    };
 
     // Register sort field
     this.register = function(element, field, descendingFirst) {
@@ -112,6 +130,9 @@
           this.toggleSort(field, descendingFirst);
         });
       }, false);
+
+      // Initialize display state
+      this.updateField(...this.fields.slice(-1));
     };
 
     // Toggle sort field
