@@ -1,6 +1,6 @@
 {
   "name": "angular-sortable-fields",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A generic module for maintaining the sort state of a set of sortable fields",
   "main": "sortable-fields.js",
   "repository": "https://github.com/MullinsLab/angular-sortable-fields",
