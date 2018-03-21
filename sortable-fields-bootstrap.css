@@ -26,3 +26,23 @@
   /* .glyphicon-sort-by-alphabet-alt */
   content: "\e152";
 }
+
+[sortable] [sortable-field].sorted.ascending.sort-indicator-numeric::before {
+  /* .glyphicon-sort-by-order */
+  content: "\e153";
+}
+
+[sortable] [sortable-field].sorted.descending.sort-indicator-numeric::before {
+  /* .glyphicon-sort-by-order-alt */
+  content: "\e154";
+}
+
+[sortable] [sortable-field].sorted.ascending.sort-indicator-abstract::before {
+  /* .glyphicon-sort-by-attributes */
+  content: "\e155";
+}
+
+[sortable] [sortable-field].sorted.descending.sort-indicator-abstract::before {
+  /* .glyphicon-sort-by-attributes-alt */
+  content: "\e156";
+}
