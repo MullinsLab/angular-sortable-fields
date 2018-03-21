@@ -18,8 +18,8 @@ The primary directive is the attribute `sortable`, which instantiates a
 SortableController on the element and publishes the controller into the
 surrounding scope as `sortable`.  Initial sort state is taken from the
 element’s `sort-state` attribute and bound to the controller’s `state`
-property.  The state is an object containing at least two properties: `field`
-and `order` (see example below).
+property.  The state is an array of objects, each of which must contain at
+least two properties: `field` and `order` (see example below).
 
 The secondary directive is the attribute `sortable-field`, which must be on a
 descendant element of a sortable element.  This attribute takes a string value
@@ -48,7 +48,7 @@ A small example of markup using this component is below:
                              { name: 'Jim',  remaining_cookies: 9 }]">
   {{ cookie_jars }}
 </pre>
-<table sortable sort-state="{ field: 'remaining_cookies', order: '-' }">
+<table sortable sort-state="[{ field: 'remaining_cookies', order: '-' }]">
   <thead>
     <tr>
       <th sortable-field="name">Name of cookie jar owner</th>

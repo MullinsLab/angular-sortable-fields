@@ -28,7 +28,7 @@
  *                               { name: 'Jim',  remaining_cookies: 9 }]">
  *    {{ cookie_jars }}
  *  </pre>
- *  <table sortable sort-state="{ field: 'remaining_cookies', order: '-' }">
+ *  <table sortable sort-state="[{ field: 'remaining_cookies', order: '-' }]">
  *    <thead>
  *      <tr>
  *        <th sortable-field="name">Name of cookie jar owner</th>
@@ -61,7 +61,8 @@
       controller: sortableController,
       controllerAs: 'sortable',
       bindToController: {
-        state: '=sortState'
+        state: '=?sortState',
+        allowMultiple: '=?sortByMultiple'
       },
       scope: true
     };
@@ -81,6 +82,9 @@
     );
 
     this.$onInit = function() {
+      if (!this.state)
+        this.state = [];
+
       this.update();
     };
 
@@ -106,7 +110,10 @@
       }
 
       // Build orderBy
-      this.orderBy = orderBy(this.state);
+      this.orderBy =
+        this.state
+          .map(orderBy)
+          .reduce((a,b) => a.concat(b), []);
 
       // Sync display state of every field
       this.fields.forEach(field => { this.updateField(field) });
@@ -114,10 +121,11 @@
 
     // Add/remove classes based on the current sort state
     this.updateField = function(field) {
-      let sortedField = this.state && this.state.field === field.field;
+      let state       = this.fieldState(field.field),
+          sortedField = !!state;
       field.element.classList.toggle("sorted",     sortedField);
-      field.element.classList.toggle("ascending",  sortedField && this.state.order === "+");
-      field.element.classList.toggle("descending", sortedField && this.state.order === "-");
+      field.element.classList.toggle("ascending",  sortedField && state.order === "+");
+      field.element.classList.toggle("descending", sortedField && state.order === "-");
     };
 
     // Register sort field
@@ -137,19 +145,48 @@
 
     // Toggle sort field
     this.toggleSort = function(name) {
-      let field = this.fields.get(name);
+      let field = this.fields.get(name),
+          state = this.fieldState(name);
 
-      switch (this.state.order + this.state.field) {
-        case "-" + field.field:
-          this.state.order = "+";
-          break;
-        case "+" + field.field:
-          this.state.order = "-";
-          break;
-        default:
-          this.state = { field: field.field, order: field.descendingFirst ? "-" : "+" };
-          break;
-      };
+      if (!state) {
+        let initialState = {
+          field: field.field,
+          order: field.descendingFirst ? "-" : "+"
+        };
+
+        if (this.allowMultiple)
+          this.state.push(initialState);
+        else
+          this.state = [ initialState ];
+      }
+      else {
+        switch (state.order + state.field) {
+          case "-" + field.field:
+            if (field.descendingFirst)
+              state.order = "+";
+            else
+              this.state.splice(this.state.indexOf(state), 1);
+            break;
+
+          case "+" + field.field:
+            if (!field.descendingFirst)
+              state.order = "-";
+            else
+              this.state.splice(this.state.indexOf(state), 1);
+            break;
+
+          default:
+            throw "Unexpected state! " + JSON.stringify(state)
+        };
+      }
+    };
+
+    // Helper for finding field state, if any
+    this.fieldState = function(name) {
+      if (this.state)
+        return this.state.filter(x => x.field === name)[0];
+      else
+        return null;
     };
   }
 
