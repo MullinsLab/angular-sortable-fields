@@ -73,3 +73,53 @@ the file [`sortable-fields-bootstrap.css`][].
 
 [Bootstrap 3]: https://getbootstrap.com/docs/3.3/
 [`sortable-fields-bootstrap.css`]: sortable-fields-bootstrap.css
+
+
+## Controller API
+
+The `sortable` controller provides a small API for interacting with in your own
+controllers or templates.
+
+### `state` property
+
+An array of objects representing the fields currently being sorted by.  Each
+object must contain at least two properties: `field` and `order`.  Order will
+be `+` or `-`.  The order of objects is significant and is the sort priority.
+
+You may set this directly, although it's not recommended outside of the
+`sort-state` attribute.
+
+### `fields` property
+
+A [Map]() of all registered sort fields.  The keys are the expressions given by
+the `sortable-field` attribute.  Values are objects like the following example:
+
+```js
+{
+    field: 'remaining_cookies',   // Field expression from the sortable-field attribute value
+
+    element: HTMLElement,         // The <th> DOM element from the example above
+
+    descendingFirst: false,       // Boolean indicating if the descending-first attribute was present
+
+    label: 'Number of cookies'    // Text content of the DOM element, useful for building richer UIs.
+                                  // Override this with a field-label attribute.
+}
+```
+
+[Map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+### `toggleSort(name)` method
+
+Toggles to the next sort state for the given field as referenced by
+name/expression (the same value given by the `sortable-field` attribute).
+
+Fields by default cycle from off → ascending → descending → off.
+
+Descending first fields cycle from off → descending → ascending → off.
+
+### `fieldState(name)` method
+
+Returns the state object from the `state` property if one exists for the given
+field, otherwise returns null.  Merely a convenience method around
+`Array.prototype.filter`.
