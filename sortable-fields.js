@@ -129,8 +129,8 @@
     };
 
     // Register sort field
-    this.register = function(element, field, descendingFirst) {
-      this.fields.set(field, { element, field, descendingFirst });
+    this.register = function(element, field, descendingFirst, label) {
+      this.fields.set(field, { element, field, descendingFirst, label });
 
       // Clicking toggles the sort
       element.addEventListener("click", () => {
@@ -205,7 +205,14 @@
 
         $log.debug("Activating sortable column: ", element);
 
-        ctrl.register(element, scope.field, "descendingFirst" in attrs);
+        ctrl.register(
+          element,
+          scope.field,
+          "descendingFirst" in attrs,
+          "fieldLabel" in attrs
+            ? attrs.fieldLabel
+            : element.textContent
+        );
       }
     };
   }
