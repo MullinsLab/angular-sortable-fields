@@ -42,6 +42,8 @@
       if (!this.state)
         this.state = [];
 
+      this.initialState = angular.copy(this.state);
+
       this.update();
     };
 
@@ -136,6 +138,11 @@
             throw "Unexpected state! " + JSON.stringify(state)
         };
       }
+    };
+
+    // Reset to initial state
+    this.reset = function() {
+      this.state = angular.copy(this.initialState);
     };
 
     // Helper for finding field state, if any
